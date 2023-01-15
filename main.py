@@ -10,6 +10,9 @@
 # $ pip install schedule - установить внешние зависимости
 
 import telebot
+import random
+import time
+import datetime
 from config import token, channel
 
 bot = telebot.TeleBot(token)
@@ -39,12 +42,27 @@ except:
 
 print(recipes1)
 
+
 # создаем словарь
 def convert_to_dict(recipe_list):
+    """
+    Преобразуем список с рецептами в словарь
+    :param recipe_list: список
+    :return: словарь
+    """
     d_recipes = {}
     for recipe in recipe_list:
         d_recipes[recipe[:recipe.index("\n\n")]] = recipe
     return d_recipes
 
-d_recipes = convert_to_dict(recipes1)
-print(d_recipes['Фриттaтa c xлeбoм'])
+#def convert_ru_en_chars(word):
+#    d_ru_en = {'а':'a', 'б':'b', 'в':'v', 'г':'g', 'д':'d', 'е':'e', 'ё':'yo', 'ж':'zh', 'з':'z', 'и':'i', 'й':'y', 'к':'k', 'л':'l', 'м':'m', 'н':'n', 'о':'o', 'п':'p', 'р':'r', 'с':'s', 'т':'t', 'у':'i', 'ф':'y', 'х':'k', 'ц':'l', 'м':'m', 'н':'n', 'о':'o', 'п':'p', 'р':'r', 'с':'s', 'т':'t', }
+
+d1_recipes = convert_to_dict(recipes1)
+print(d1_recipes)
+recipe_names = list(d1_recipes.keys())  # названия блюд
+print(recipe_names)
+
+answer = d1_recipes[random.choice(recipe_names)]
+bot.send_message(CHANNEL_NAME, answer)
+#time.sleep(random.randint(16200, 32400)) # один-два поста в день достаточно для дзен
