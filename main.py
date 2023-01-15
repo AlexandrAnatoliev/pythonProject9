@@ -40,8 +40,11 @@ except:
 print(recipes1)
 
 # создаем словарь
-d_recipes = {}
-for recipe in recipes1:
-    d_recipes[recipe[:recipe.index("\n\n")]] = recipe
+def convert_to_dict(recipe_list):
+    d_recipes = {}
+    for recipe in recipe_list:
+        d_recipes[recipe[:recipe.index("\n\n")]] = recipe
+    return d_recipes
 
+d_recipes = convert_to_dict(recipes1)
 print(d_recipes['Фриттaтa c xлeбoм'])
