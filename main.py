@@ -31,7 +31,7 @@ try:
     # Загружаем список рецептов1
     try:
         f = open('recipes1.txt', 'r', encoding='UTF-8')
-        recipes1 = f.read().split('\n\n\n')
+        recipes1 = f.read().split('\n\n\n')  # список с рецептами
     finally:
         f.close()
 
@@ -39,8 +39,6 @@ except FileNotFoundError:
     print("Невозможно открыть файл")
 except:
     print("Ошибка при работе с файлами")
-
-print(recipes1)
 
 
 # создаем словарь
@@ -55,14 +53,15 @@ def convert_to_dict(recipe_list):
         d_recipes[recipe[:recipe.index("\n\n")]] = recipe
     return d_recipes
 
-#def convert_ru_en_chars(word):
+
+# def convert_ru_en_chars(word):
 #    d_ru_en = {'а':'a', 'б':'b', 'в':'v', 'г':'g', 'д':'d', 'е':'e', 'ё':'yo', 'ж':'zh', 'з':'z', 'и':'i', 'й':'y', 'к':'k', 'л':'l', 'м':'m', 'н':'n', 'о':'o', 'п':'p', 'р':'r', 'с':'s', 'т':'t', 'у':'i', 'ф':'y', 'х':'k', 'ц':'l', 'м':'m', 'н':'n', 'о':'o', 'п':'p', 'р':'r', 'с':'s', 'т':'t', }
 
-d1_recipes = convert_to_dict(recipes1)
-print(d1_recipes)
+d1_recipes = convert_to_dict(recipes1)  # словарь с рецептами
 recipe_names = list(d1_recipes.keys())  # названия блюд
-print(recipe_names)
 
-answer = d1_recipes[random.choice(recipe_names)]
-bot.send_message(CHANNEL_NAME, answer)
-#time.sleep(random.randint(16200, 32400)) # один-два поста в день достаточно для дзен
+answer = d1_recipes[random.choice(recipe_names)]  # выбираем случайный рецепт из словаря
+bot.send_message(CHANNEL_NAME, answer)  # посылаем его
+files = open("photo.png", 'rb')  # открываем картинку
+bot.send_photo(CHANNEL_NAME, photo=files, caption='фото')  # посылаем ее и текст к ней
+# time.sleep(random.randint(16200, 32400)) # один-два поста в день достаточно для дзен
