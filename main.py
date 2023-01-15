@@ -63,5 +63,5 @@ recipe_names = list(d1_recipes.keys())  # названия блюд
 answer = d1_recipes[random.choice(recipe_names)]  # выбираем случайный рецепт из словаря
 bot.send_message(CHANNEL_NAME, answer)  # посылаем его
 files = open("photo.png", 'rb')  # открываем картинку
-bot.send_photo(CHANNEL_NAME, photo=files, caption='фото')  # посылаем ее и текст к ней
+bot.send_photo(CHANNEL_NAME, photo=files, caption=answer)  # посылаем ее и текст к ней
 # time.sleep(random.randint(16200, 32400)) # один-два поста в день достаточно для дзен
