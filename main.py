@@ -38,3 +38,10 @@ except:
     print("Ошибка при работе с файлами")
 
 print(recipes1)
+
+# создаем словарь
+d_recipes = {}
+for recipe in recipes1:
+    d_recipes[recipe[:recipe.index("\n\n")]] = recipe
+
+print(d_recipes['Фриттaтa c xлeбoм'])
