@@ -63,21 +63,21 @@ def convert_to_dict(recipe_list):
 
 def test():
     """
-    Перебирает все блюда.
+    Перебирает все блюда. Стаабильно обрабатывает 10-20 сообщений (использовать срезы списков).
     :return:  Выводит название блюда и длину сообщения
     """
-    for recipe_name in recipe_names1[15:]:  # Перебирем все блюда. Если выводит ошибку - попрововать сделать срез списка
+    for recipe_name in recipe_names2[10:]:  # Перебирем все блюда. Если выводит ошибку - попрововать сделать срез списка
         time.sleep(2)
         promo = random.choice(prom_list)  # реклама
         print(f"recipe_name: {recipe_name}, promo: {promo}")
-        answer = d1_recipes[recipe_name]  # выбираем рецепт из словаря по названию блюда
+        answer = d2_recipes[recipe_name]  # выбираем рецепт из словаря по названию блюда
         if len(answer + '\n\n' + promo) < 1000:
             answer += '\n\n' + promo
 
         print("длина рецепта: ", len(answer))  # если длина более 1024, то картинку не закрепить
         try:
             try:  # этот блок не прерывает работу программы
-                files = open(path_list1[recipe_name], 'rb')  # открываем картинку
+                files = open(path_dict2[recipe_name], 'rb')  # открываем картинку
                 bot.send_photo(CHANNEL_NAME, photo=files, caption=answer)  # посылаем ее и рецепт
             finally:
                 files.close()  # и закрывает открытый файл если он не прочитался
@@ -87,8 +87,26 @@ def test():
             print("Ошибка при работе с изображением")
 
 
+def get_path():
+    """
+    Определяет случайным образом из какой папки будут браться рецепты
+    :return: словарь с рецептами, список с названиями блюд, словарь с путями к фото
+    """
+    ind = random.randint(1, 2)
+    if ind == 1:
+        d_rec = d1_recipes
+        recipe_n = recipe_names1
+        path_d = path_dict1
+    else:
+        d_rec = d2_recipes
+        recipe_n = recipe_names2
+        path_d = path_dict2
+
+    return d_rec, recipe_n, path_d
+
+
 # список1 с путями к фото {"название блюда":"путь к нему"}
-path_list1 = {"Фриттaтa c xлeбoм": "pictures1/pict1.jpg", 'Твoрoжный cмузи c бaнaнoм и кaкao': "pictures1/pict2.jpg",
+path_dict1 = {"Фриттaтa c xлeбoм": "pictures1/pict1.jpg", 'Твoрoжный cмузи c бaнaнoм и кaкao': "pictures1/pict2.jpg",
               'Омлeт в пaрoвaркe': "pictures1/pict3.jpg", 'Сaлaт из щaвeля c яйцoм и oгурцoм': "pictures1/pict4.jpg",
               'Смузи c мaлинoй и бaнaнoм': "pictures1/pict5.jpeg",
               'Мaлинoвый cмузи c бaнaнoм и чeрнoй cмoрoдинoй': "pictures1/pict6.jpg",
@@ -109,7 +127,7 @@ path_list1 = {"Фриттaтa c xлeбoм": "pictures1/pict1.jpg", 'Твoрoжн
               'Кaбaчкoвaя икрa c чecнoкoм': "pictures1/pict23.jpg"}
 
 # список2 с путями к фото {"название блюда":"путь к нему"}
-path_list2 = {'Сaлaт c фacoлью, вeтчинoй и cырoм': "pictures2/pict1.jpg",
+path_dict2 = {'Сaлaт c фacoлью, вeтчинoй и cырoм': "pictures2/pict1.jpg",
               'Пeчeньe oвcянoe c мeдoм': "pictures2/pict2.jpg", 'Блинчики c вeтчинoй и cырoм': "pictures2/pict3.jpg",
               'Бутeрбрoды c aнaнacoм, вeтчинoй и cырoм': "pictures2/pict4.jpg",
               'Пacтa c вeтчинoй и cырoм': "pictures2/pict5.jpg",
@@ -149,6 +167,7 @@ recipe_names2 = list(d2_recipes.keys())  # список1 с названиями
 
 # test()  # перебираем все рецепты
 
+
 work_bot_fl = True
 while work_bot_fl:
 
@@ -159,16 +178,18 @@ while work_bot_fl:
 
     if morning < now < night:  # если день
         print("Бот работает (день)")  # проверка бота
+        d_recipes, recipe_names, path_dict = get_path()  # словарь с рецептами, список с названиями блюд, словарь с путями к фото
+
         # time.sleep(random.randint(60, 7200))  # c 7 до 9 самое популярное время для постов todo
         promo = random.choice(prom_list)  # реклама
 
-        recipe_name = random.choice(recipe_names1)  # название блюда - случайное
-        answer = d1_recipes[recipe_name]  # выбираем рецепт из словаря по названию блюда
+        recipe_name = random.choice(recipe_names)  # название блюда - случайное
+        answer = d_recipes[recipe_name]  # выбираем рецепт из словаря по названию блюда
         if len(answer + '\n\n' + promo) < 1000:
             answer += '\n\n' + promo
         try:
             try:  # этот блок не прерывает работу программы
-                files = open(path_list1[recipe_name], 'rb')  # открываем картинку
+                files = open(path_dict[recipe_name], 'rb')  # открываем картинку
                 bot.send_photo(CHANNEL_NAME, photo=files, caption=answer)  # посылаем ее и рецепт
             finally:
                 files.close()  # и закрывает открытый файл если он не прочитался
