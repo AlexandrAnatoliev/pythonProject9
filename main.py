@@ -1,4 +1,4 @@
-# pythonProject 9 todo документация и гитхаб
+# pythonProject 9
 
 # БОТ, ВЕДУЩИЙ TELEGRAM-КАНАЛ С РЕЦЕПТАМИ
 # Бот получает список рецептов из файла, создает словарь и случайный рецепт (с рекламой!!!) и с фото блюда
@@ -35,7 +35,7 @@ try:
     finally:
         f.close()
 
-    # Загружаем список рецептов1
+    # Загружаем список рецептов2
     try:
         f = open('recipes2.txt', 'r', encoding='UTF-8')
         recipes2 = f.read().split('\n\n\n')  # список с рецептами
@@ -167,25 +167,22 @@ recipe_names2 = list(d2_recipes.keys())  # список1 с названиями
 
 # test()  # перебираем все рецепты
 
-
 work_bot_fl = True
 while work_bot_fl:
 
     current_date_time = datetime.datetime.now()
     now = current_date_time.time()  # текущее время
     morning = datetime.time(7, 32, 0)  # время начала работы бота
-    night = datetime.time(23, 45, 0)  # время окончания работы бота todo
+    night = datetime.time(18, 45, 0)  # время окончания работы бота
 
     if morning < now < night:  # если день
         print("Бот работает (день)")  # проверка бота
         d_recipes, recipe_names, path_dict = get_path()  # словарь с рецептами, список с названиями блюд, словарь с путями к фото
-
-        # time.sleep(random.randint(60, 7200))  # c 7 до 9 самое популярное время для постов todo
+        time.sleep(random.randint(60, 7200))  # c 7 до 9 самое популярное время для постов
         promo = random.choice(prom_list)  # реклама
-
         recipe_name = random.choice(recipe_names)  # название блюда - случайное
         answer = d_recipes[recipe_name]  # выбираем рецепт из словаря по названию блюда
-        if len(answer + '\n\n' + promo) < 1000:
+        if len(answer + '\n\n' + promo) < 1000:  # если длиннее, то картинка не прикрепится, ограничение телеграмм
             answer += '\n\n' + promo
         try:
             try:  # этот блок не прерывает работу программы
@@ -198,5 +195,4 @@ while work_bot_fl:
         except:
             print("Ошибка при работе с изображением")
         # таймер работы бота (от 1 до 5 часов)
-
         time.sleep(random.randint(16200, 32400))  # один-два поста в день достаточно для дзен
