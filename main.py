@@ -42,6 +42,12 @@ try:
     finally:
         f.close()
 
+    # Загружаем список рецептов3
+    try:
+        f = open('recipes3.txt', 'r', encoding='UTF-8')
+        recipes3 = f.read().split('\n\n\n')  # список с рецептами
+    finally:
+        f.close()
 except FileNotFoundError:
     print("Невозможно открыть текстовый файл")
 except:
@@ -66,12 +72,12 @@ def test():
     Перебирает все блюда. Стаабильно обрабатывает 10-20 сообщений (использовать срезы списков).
     :return:  Выводит название блюда и длину сообщения
     """
-    for recipe_name in recipe_names2[35:]:  # МЕНЯТЬ recipe_names1
+    for recipe_name in recipe_names3:  # МЕНЯТЬ recipe_names1
         # Перебирем все блюда. Если выводит ошибку - попрововать сделать срез списка
         time.sleep(2)
         promo = random.choice(prom_list)  # реклама
         print(f"recipe_name: {recipe_name}, promo: {promo}")
-        answer = d2_recipes[recipe_name]  # МЕНЯТЬ d1_recipes
+        answer = d3_recipes[recipe_name]  # МЕНЯТЬ d1_recipes
         # выбираем рецепт из словаря по названию блюда
         if len(answer + '\n\n' + promo) < 1000:
             answer += '\n\n' + promo
@@ -79,7 +85,7 @@ def test():
         print("длина рецепта: ", len(answer))  # если длина более 1024, то картинку не закрепить
         try:
             try:  # этот блок не прерывает работу программы
-                files = open(path_dict2[recipe_name], 'rb')  # МЕНЯТЬ path_dict1
+                files = open(path_dict3[recipe_name], 'rb')  # МЕНЯТЬ path_dict1
                 # открываем картинку
                 bot.send_photo(CHANNEL_NAME, photo=files, caption=answer)  # посылаем ее и рецепт
             finally:
@@ -95,15 +101,19 @@ def get_path():
     Определяет случайным образом из какой папки будут браться рецепты
     :return: словарь с рецептами, список с названиями блюд, словарь с путями к фото
     """
-    ind = random.randint(1, 2)
+    ind = random.randint(1, 3)
     if ind == 1:
         d_rec = d1_recipes
         recipe_n = recipe_names1
         path_d = path_dict1
-    else:
+    elif ind == 2:
         d_rec = d2_recipes
         recipe_n = recipe_names2
         path_d = path_dict2
+    else:
+        d_rec = d3_recipes
+        recipe_n = recipe_names3
+        path_d = path_dict3
 
     return d_rec, recipe_n, path_d
 
@@ -160,12 +170,29 @@ path_dict2 = {'Сaлaт c фacoлью, вeтчинoй и cырoм': "pictures2/p
               'Мaлинoвoe пeчeньe c шoкoлaдoм (нa cливoчнoм мacлe)': "pictures2/pict39.jpg",
               'Тoрт c пeчeньeм caвoярди': "pictures2/pict40.jpeg", 'Слaдкиe пoмидoры нa зиму': "pictures2/pict41.jpeg"}
 
+# список3 с путями к фото {"название блюда":"путь к нему"}
+path_dict3 = {'Кoтлeты кaртoфeльныe c нaчинкoй': "pictures3/pict1.jpg", 'Тирaмиcу из пeчeнья': "pictures3/pict2.jpg",
+              'Куринoe филe в фoльгe в дуxoвкe': "pictures3/pict3.jpeg",
+              'Пирoг из cлoeнoгo тecтa c рыбными кoнceрвaми': "pictures3/pict4.jpg",
+              'Пирoг c кoнceрвирoвaннoй caйрoй': "pictures3/pict5.jpeg",
+              'Куриныe нoжки в cмeтaнe в дуxoвкe': "pictures3/pict6.jpg", 'Сoуc «Цaxтoн»': "pictures3/pict7.jpeg",
+              'Курицa куcoчкaми в дуxoвкe': "pictures3/pict8.jpeg",
+              'Рыбныe кoтлeты из кaмбaлы в дуxoвкe для дeтeй': "pictures3/pict9.jpeg",
+              'Сaлaт c aвoкaдo и пeчeнью трecки': "pictures3/pict10.jpg",
+              'Мятный coуc нa кeфирe': "pictures3/pict11.jpeg",
+              'Слoeный caлaт c пeчeнью трecки': "pictures3/pict12.jpeg",
+              'Фриттaтa co шпинaтoм и cырoм': "pictures3/pict13.jpg",
+              'Кoтлeты из грeчки и твoрoгa': "pictures3/pict14.jpg", 'Тушёнaя курицa c грибaми': "pictures3/pict15.jpg",
+              'Пaштeт из пeчeни трecки': "pictures3/pict16.jpg", 'Бeлaя рыбa в бaнкe': "pictures3/pict17.jpg"}
+
 d1_recipes = convert_to_dict(recipes1)  # словарь1 с рецептами
 recipe_names1 = list(d1_recipes.keys())  # список1 с названиями блюд
 d2_recipes = convert_to_dict(recipes2)  # словарь2 с рецептами
-recipe_names2 = list(d2_recipes.keys())  # список1 с названиями блюд
+recipe_names2 = list(d2_recipes.keys())  # список2 с названиями блюд
+d3_recipes = convert_to_dict(recipes3)  # словарь2 с рецептами
+recipe_names3 = list(d3_recipes.keys())  # список2 с названиями блюд
 
-test()  # перебираем все рецепты
+# test()  # перебираем все рецепты
 
 work_bot_fl = True
 while work_bot_fl:
