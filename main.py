@@ -20,38 +20,26 @@ bot = telebot.TeleBot(token)
 # Адрес телеграм-канала, начинается с @
 CHANNEL_NAME = channel
 
-try:
-    # Загружаем список с рекламными объявлениями из файла promotions.txt
-    try:  # этот блок не прерывает работу программы
-        p = open('promotions.txt', 'r', encoding='UTF-8')
-        prom_list = p.read().split('\n\n\n')
-    finally:
-        p.close()  # и закрывает открытый файл если он не прочитался
 
-    # Загружаем список рецептов1
+def open_text(path):
+    """
+    Загружает список с текстом из файла, выводит уведомление об удачной загрузке или ошибке
+    :param path:путь к файлу в виде 'recipes1.txt'
+    :return: список с текстовыми данными
+    """
     try:
-        f = open('recipes1.txt', 'r', encoding='UTF-8')
-        recipes1 = f.read().split('\n\n\n')  # список с рецептами
-    finally:
-        f.close()
-
-    # Загружаем список рецептов2
-    try:
-        f = open('recipes2.txt', 'r', encoding='UTF-8')
-        recipes2 = f.read().split('\n\n\n')  # список с рецептами
-    finally:
-        f.close()
-
-    # Загружаем список рецептов3
-    try:
-        f = open('recipes3.txt', 'r', encoding='UTF-8')
-        recipes3 = f.read().split('\n\n\n')  # список с рецептами
-    finally:
-        f.close()
-except FileNotFoundError:
-    print("Невозможно открыть текстовый файл")
-except:
-    print("Ошибка при работе с текстовыми файлами")
+        # Загружаем список с текстом из файла
+        try:  # этот блок не прерывает работу программы
+            p = open(path, 'r', encoding='UTF-8')
+            text_list = p.read().split('\n\n\n')
+            print(f"Загружен файл \"{path}\" длиной {len(text_list)}")
+        finally:
+            p.close()  # и закрывает открытый файл если он не прочитался
+    except FileNotFoundError:
+        print(f"Невозможно открыть текстовый файл: {path}")
+    except:
+        print(f"Ошибка при работе с текстовым файлом: {path}")
+    return text_list
 
 
 # создаем словарь
@@ -117,6 +105,12 @@ def get_path():
 
     return d_rec, recipe_n, path_d
 
+
+# Загружаем список с рекламными объявлениями и рецепты из файлов
+prom_list = open_text('promotions.txt')
+recipes1 = open_text('recipes1.txt')
+recipes2 = open_text('recipes2.txt')
+recipes3 = open_text('recipes3.txt')
 
 # список1 с путями к фото {"название блюда":"путь к нему"}
 path_dict1 = {"Фриттaтa c xлeбoм": "pictures1/pict1.jpg", 'Твoрoжный cмузи c бaнaнoм и кaкao': "pictures1/pict2.jpg",
@@ -192,7 +186,7 @@ recipe_names2 = list(d2_recipes.keys())  # список2 с названиями
 d3_recipes = convert_to_dict(recipes3)  # словарь2 с рецептами
 recipe_names3 = list(d3_recipes.keys())  # список2 с названиями блюд
 
-# test()  # перебираем все рецепты
+test()  # перебираем все рецепты
 
 work_bot_fl = True
 while work_bot_fl:
