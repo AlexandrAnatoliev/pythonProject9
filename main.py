@@ -84,12 +84,12 @@ def test():
             print("Ошибка при работе с изображением")
 
 
-def get_path():
+def get_path(ind):
     """
     Определяет случайным образом из какой папки будут браться рецепты
     :return: словарь с рецептами, список с названиями блюд, словарь с путями к фото
     """
-    ind = random.randint(1, 4)
+    # ind = random.randint(1, 5)
     if ind == 1:
         d_rec = d1_recipes
         recipe_n = recipe_names1
@@ -255,7 +255,7 @@ recipe_names4 = list(d4_recipes.keys())  # список4 с названиями
 d5_recipes = convert_to_dict(recipes5)  # словарь5 с рецептами
 recipe_names5 = list(d5_recipes.keys())  # список5 с названиями блюд
 
-test()  # перебираем все рецепты
+# test()  # перебираем все рецепты
 
 work_bot_fl = True
 while work_bot_fl:
@@ -263,15 +263,21 @@ while work_bot_fl:
     current_date_time = datetime.datetime.now()
     now = current_date_time.time()  # текущее время
     morning = datetime.time(7, 32, 0)  # время начала работы бота
-    night = datetime.time(18, 45, 0)  # время окончания работы бота
+    night = datetime.time(23, 45, 0)  # время окончания работы бота
 
     if morning < now < night:  # если день
-        print("Бот работает (день)")  # проверка бота
-        d_recipes, recipe_names, path_dict = get_path()  # словарь с рецептами, список с названиями блюд, словарь с путями к фото
-        time.sleep(random.randint(60, 7200))  # c 7 до 9 самое популярное время для постов
+        number_dict = int(*open_text('number_dict.txt'))  # номер словаря
+        number_recipe = int(*open_text('number_recipe.txt'))  # номер рецепта
+
+        d_recipes, recipe_names, path_dict = get_path(number_dict)
+        # словарь с рецептами, список с названиями блюд, словарь с путями к фото
+
+        print(f"Бот работает, папка с рецептами: {number_dict}, рецепт номер: {number_recipe}")  # проверка бота
+        time.sleep(random.randint(5, 10))  # c 7 до 9 самое популярное время для постов
         promo = random.choice(prom_list)  # реклама
-        recipe_name = random.choice(recipe_names)  # название блюда - случайное
+        recipe_name = recipe_names[number_recipe]  # название блюда
         answer = d_recipes[recipe_name]  # выбираем рецепт из словаря по названию блюда
+
         if len(answer + '\n\n' + promo) < 1000:  # если длиннее, то картинка не прикрепится, ограничение телеграмм
             answer += '\n\n' + promo
         try:
@@ -284,5 +290,22 @@ while work_bot_fl:
             print("Невозможно открыть файл с изображением")
         except:
             print("Ошибка при работе с изображением")
+
+        try:  # перебираем рецепты
+            if number_recipe < len(recipe_names) - 1:
+                # [0,1,2,3] len ==4 => 2 - предпоследний номер и может быть еще увеличен
+                number_recipe += 1
+            else:
+                number_recipe = 0
+            try:  # этот блок не прерывает работу программы
+                file = open("number_recipe.txt", "w")  # открываем НЕ писать кодировку?
+                file.write(f"{number_recipe}")
+            finally:
+                file.close()  # и закрывает открытый файл если он не прочитался
+        except FileNotFoundError:
+            print("Невозможно открыть файл с номером рецепта")
+        except:
+            print("Ошибка при работе с файлом с номером рецепта")
+
         # таймер работы бота (от 1 до 5 часов)
-        time.sleep(random.randint(16200, 32400))  # один-два поста в день достаточно для дзен
+        time.sleep(random.randint(5, 10))  # один-два поста в день достаточно для дзен
