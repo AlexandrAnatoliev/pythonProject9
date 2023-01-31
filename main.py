@@ -13,6 +13,7 @@ import telebot
 import random
 import time
 import datetime
+
 from config import token, channel
 
 bot = telebot.TeleBot(token)
@@ -263,7 +264,7 @@ while work_bot_fl:
     current_date_time = datetime.datetime.now()
     now = current_date_time.time()  # текущее время
     morning = datetime.time(7, 32, 0)  # время начала работы бота
-    night = datetime.time(23, 45, 0)  # время окончания работы бота
+    night = datetime.time(12, 45, 0)  # время окончания работы бота
 
     if morning < now < night:  # если день
         number_dict = int(*open_text('number_dict.txt'))  # номер словаря
@@ -273,7 +274,7 @@ while work_bot_fl:
         # словарь с рецептами, список с названиями блюд, словарь с путями к фото
 
         print(f"Бот работает, папка с рецептами: {number_dict}, рецепт номер: {number_recipe}")  # проверка бота
-        time.sleep(random.randint(5, 10))  # c 7 до 9 самое популярное время для постов
+        time.sleep(random.randint(60, 7200))  # c 7 до 9 самое популярное время для постов
         promo = random.choice(prom_list)  # реклама
         recipe_name = recipe_names[number_recipe]  # название блюда
         answer = d_recipes[recipe_name]  # выбираем рецепт из словаря по названию блюда
@@ -314,4 +315,4 @@ while work_bot_fl:
             print("Ошибка при работе с файлом с номером")
 
         # таймер работы бота (от 1 до 5 часов)
-        time.sleep(random.randint(5, 10))  # один-два поста в день достаточно для дзен
+        time.sleep(random.randint(3600, 17000))  # один-два поста в день достаточно для дзен
