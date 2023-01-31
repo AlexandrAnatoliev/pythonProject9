@@ -297,15 +297,21 @@ while work_bot_fl:
                 number_recipe += 1
             else:
                 number_recipe = 0
-            try:  # этот блок не прерывает работу программы
+                number_dict += 1
+                try:  # этот блок переключает словарь
+                    file = open("number_dict.txt", "w")  # открываем НЕ писать кодировку?
+                    file.write(f"{number_dict}")
+                finally:
+                    file.close()  # и закрывает открытый файл если он не прочитался
+            try:  # этот блок переключает рецепт
                 file = open("number_recipe.txt", "w")  # открываем НЕ писать кодировку?
                 file.write(f"{number_recipe}")
             finally:
                 file.close()  # и закрывает открытый файл если он не прочитался
         except FileNotFoundError:
-            print("Невозможно открыть файл с номером рецепта")
+            print("Невозможно открыть файл с номером")
         except:
-            print("Ошибка при работе с файлом с номером рецепта")
+            print("Ошибка при работе с файлом с номером")
 
         # таймер работы бота (от 1 до 5 часов)
         time.sleep(random.randint(5, 10))  # один-два поста в день достаточно для дзен
